@@ -2,18 +2,34 @@ const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
+// Example AI responses for testing
+const sampleAnswers = [
+  "Virat Kohli scored 122 runs in his last match!",
+  "Cristiano Ronaldo has 700+ career goals.",
+  "India beat Australia by 6 wickets in the last T20.",
+  "Lionel Messi has 30 assists in the last season.",
+  "This match looks like a high-scoring thriller!"
+];
+
 sendBtn.addEventListener('click', () => {
   const question = userInput.value.trim();
   if (!question) return;
 
+  // Add user's message
   appendMessage('You', question, 'user-msg');
   userInput.value = '';
+
+  // Add AI typing effect
   appendMessage('SportsMind AI', 'Typing...', 'ai-msg');
 
-  // Replace this with proxy URL if direct API fails
-  fetchOpenAI(question);
+  // Simulate AI response delay
+  setTimeout(() => {
+    const answer = getAIResponse(question);
+    chatBox.lastChild.innerHTML = `<strong>SportsMind AI:</strong> ${answer}`;
+  }, 1000 + Math.random() * 1000); // 1-2 seconds delay
 });
 
+// Function to append messages
 function appendMessage(sender, message, cls) {
   const msgDiv = document.createElement('div');
   msgDiv.classList.add(cls);
@@ -22,30 +38,9 @@ function appendMessage(sender, message, cls) {
   chatBox.scrollTop = chatBox.scrollHeight;
 }
 
-// Call OpenAI API (use backend proxy for GitHub Pages)
-async function fetchOpenAI(question) {
-  try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer YOUR_OPENAI_API_KEY'
-      },
-      body: JSON.stringify({
-        model: "gpt-3.5-turbo",
-        messages: [
-          { role: "system", content: "You are SportsMind AI. Answer ONLY cricket and football questions. Include stats, comparisons, predictions." },
-          { role: "user", content: question }
-        ],
-        max_tokens: 300
-      })
-    });
-
-    const data = await response.json();
-    const answer = data.choices[0].message.content;
-    chatBox.lastChild.innerHTML = `<strong>SportsMind AI:</strong> ${answer}`;
-  } catch (error) {
-    chatBox.lastChild.innerHTML = `<strong>SportsMind AI:</strong> Error fetching answer. Use a proxy server.`;
-    console.error(error);
-  }
+// Function to simulate AI response
+function getAIResponse(question) {
+  // Randomly pick a sample answer (can customize later)
+  const randomIndex = Math.floor(Math.random() * sampleAnswers.length);
+  return sampleAnswers[randomIndex];
 }
