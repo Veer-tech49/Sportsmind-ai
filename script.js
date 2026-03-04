@@ -6,7 +6,7 @@ sendBtn.addEventListener('click', async () => {
   const question = userInput.value.trim();
   if (!question) return;
 
-  // Show user message
+  // Show user's message
   const userMsg = document.createElement('div');
   userMsg.classList.add('user-msg');
   userMsg.innerHTML = `<strong>You:</strong> ${question}`;
@@ -22,11 +22,11 @@ sendBtn.addEventListener('click', async () => {
   chatBox.scrollTop = chatBox.scrollHeight;
 
   try {
-    // Call Vercel proxy
-    const response = await fetch("https://YOUR-VERCEL-URL.vercel.app/ask", {
+    // Call your Vercel backend
+    const response = await fetch("https://sportsmind-ai.vercel.app/ask", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ question })
+      body: JSON.stringify({ question }) // sends question to backend
     });
 
     const data = await response.json();
