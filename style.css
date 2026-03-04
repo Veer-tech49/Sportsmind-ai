@@ -1,0 +1,141 @@
+/* Body + Background */
+body {
+  font-family: 'Roboto Mono', monospace;
+  margin: 0;
+  padding: 0;
+  color: #00ffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #0d1117;
+  overflow-x: hidden;
+}
+
+/* Animated gradient background */
+#bg {
+  position: fixed;
+  top:0; left:0; width:100%; height:100%;
+  background: linear-gradient(270deg, #001f3f, #00ffff, #0d1117, #00ffff);
+  background-size: 800% 800%;
+  animation: gradientBG 15s ease infinite;
+  z-index: -1;
+}
+
+@keyframes gradientBG {
+  0% {background-position:0% 50%;}
+  50% {background-position:100% 50%;}
+  100% {background-position:0% 50%;}
+}
+
+/* Header */
+header {
+  text-align: center;
+  padding: 2rem;
+}
+
+header h1 {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 3.5rem;
+  color: #00ffff;
+  text-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff, 0 0 45px #00ffff;
+  animation: neonGlow 1.5s infinite alternate;
+}
+
+header p {
+  font-size: 1.4rem;
+  color: #c9d1d9;
+}
+
+/* Neon glow animation */
+@keyframes neonGlow {
+  from {text-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff;}
+  to {text-shadow: 0 0 25px #00ffff, 0 0 50px #00ffff;}
+}
+
+/* Chat container */
+#chat-container {
+  width: 80%;
+  height: 60vh;
+  margin: 1rem auto;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-box {
+  flex: 1;
+  background: #161b22;
+  padding: 1rem;
+  border-radius: 15px;
+  overflow-y: auto;
+  box-shadow: 0 0 25px #00ffff;
+}
+
+/* Chat messages */
+#chat-box div {
+  margin: 0.7rem 0;
+  padding: 1rem;
+  border-radius: 15px;
+  max-width: 75%;
+  font-size: 1.2rem;
+  animation: slideFade 0.5s ease;
+}
+
+.user-msg {
+  background: #001f3f;
+  align-self: flex-end;
+  box-shadow: 0 0 15px #001f3f;
+}
+
+.ai-msg {
+  background: #004d40;
+  align-self: flex-start;
+  box-shadow: 0 0 15px #00ffff;
+}
+
+/* Slide-in + fade animation */
+@keyframes slideFade {
+  from {opacity:0; transform: translateY(20px);}
+  to {opacity:1; transform: translateY(0);}
+}
+
+/* Input container */
+#input-container {
+  display: flex;
+  margin-top: 0.5rem;
+}
+
+#user-input {
+  flex: 1;
+  padding: 1rem;
+  border-radius: 10px 0 0 10px;
+  border: none;
+  font-size: 1.2rem;
+  box-shadow: 0 0 15px #00ffff;
+}
+
+#send-btn {
+  padding: 1rem 1.5rem;
+  border: none;
+  background: #00ffff;
+  color: #0d1117;
+  font-weight: bold;
+  border-radius: 0 10px 10px 0;
+  cursor: pointer;
+  box-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+  transition: all 0.3s ease;
+}
+
+#send-btn:hover {
+  transform: scale(1.08);
+  box-shadow: 0 0 30px #00ffff, 0 0 60px #00ffff;
+}
+
+/* Premium Section */
+#premium {
+  text-align: center;
+  margin-top: 2rem;
+  background: #161b22;
+  padding: 1.5rem;
+  border-radius: 15px;
+  box-shadow: 0 0 25px #00ffff;
+}
