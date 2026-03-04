@@ -6,20 +6,33 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// Friendly GET route
+app.get("/", (req, res) => {
+  res.send("🎮 SportsMind AI backend is live! Use POST /ask to get answers.");
+});
+
+// POST route for AI questions
 app.post("/ask", async (req, res) => {
   const { question } = req.body;
+
+  if (!question) {
+    return res.status(400).json({ answer: "No question provided." });
+  }
 
   try {
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_KEY}`
+        "Authorization": `Bearer ${process.env.OPENAI_KEY}` // <- key from Vercel env
       },
       body: JSON.stringify({
         model: "gpt-3.5-turbo",
         messages: [
-          { role: "system", content: "You are SportsMind AI. Answer ONLY cricket & football questions with stats, predictions, and insights." },
+          {
+            role: "system",
+            content: "You are SportsMind AI. Answer ONLY cricket & football questions with stats, predictions, and insights."
+          },
           { role: "user", content: question }
         ],
         max_tokens: 300
@@ -31,8 +44,9 @@ app.post("/ask", async (req, res) => {
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ answer: "Error fetching AI answer" });
+    res.status(500).json({ answer: "Error fetching AI answer. Check your OpenAI key and network." });
   }
 });
 
-app.listen(3000, () => console.log("Server running..."));
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`Server running on port ${port}`));
