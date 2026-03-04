@@ -2,45 +2,37 @@ const chatBox = document.getElementById('chat-box');
 const userInput = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-// Example AI responses for testing
-const sampleAnswers = [
-  "Virat Kohli scored 122 runs in his last match!",
-  "Cristiano Ronaldo has 700+ career goals.",
-  "India beat Australia by 6 wickets in the last T20.",
-  "Lionel Messi has 30 assists in the last season.",
-  "This match looks like a high-scoring thriller!"
-];
-
-sendBtn.addEventListener('click', () => {
+sendBtn.addEventListener('click', async () => {
   const question = userInput.value.trim();
   if (!question) return;
 
-  // Add user's message
-  appendMessage('You', question, 'user-msg');
+  // Show user message
+  const userMsg = document.createElement('div');
+  userMsg.classList.add('user-msg');
+  userMsg.innerHTML = `<strong>You:</strong> ${question}`;
+  chatBox.appendChild(userMsg);
+
   userInput.value = '';
 
-  // Add AI typing effect
-  appendMessage('SportsMind AI', 'Typing...', 'ai-msg');
-
-  // Simulate AI response delay
-  setTimeout(() => {
-    const answer = getAIResponse(question);
-    chatBox.lastChild.innerHTML = `<strong>SportsMind AI:</strong> ${answer}`;
-  }, 1000 + Math.random() * 1000); // 1-2 seconds delay
-});
-
-// Function to append messages
-function appendMessage(sender, message, cls) {
-  const msgDiv = document.createElement('div');
-  msgDiv.classList.add(cls);
-  msgDiv.innerHTML = `<strong>${sender}:</strong> ${message}`;
-  chatBox.appendChild(msgDiv);
+  // Show AI typing
+  const aiMsg = document.createElement('div');
+  aiMsg.classList.add('ai-msg');
+  aiMsg.innerHTML = `<strong>SportsMind AI:</strong> Typing...`;
+  chatBox.appendChild(aiMsg);
   chatBox.scrollTop = chatBox.scrollHeight;
-}
 
-// Function to simulate AI response
-function getAIResponse(question) {
-  // Randomly pick a sample answer (can customize later)
-  const randomIndex = Math.floor(Math.random() * sampleAnswers.length);
-  return sampleAnswers[randomIndex];
-}
+  try {
+    // Call Vercel proxy
+    const response = await fetch("https://YOUR-VERCEL-URL.vercel.app/ask", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ question })
+    });
+
+    const data = await response.json();
+    aiMsg.innerHTML = `<strong>SportsMind AI:</strong> ${data.answer}`;
+  } catch (err) {
+    aiMsg.innerHTML = `<strong>SportsMind AI:</strong> Error fetching answer.`;
+    console.error(err);
+  }
+});
